@@ -46,20 +46,23 @@ app.get('/api/user', (req,res) => {
 });
 
 app.get('/api/notes/:uuid', (req,res) => {
+    const uuid = req.params.uuid;
+    
     const notes = readNotes();
+    const data = notes.users[uuid].notes;
+    
     res.json(notes);
 });
 
 app.post('/api/notes', (req, res) => {
-    console.log(req.body);
-    return;
+    const uuid = req.body.uuid;
     const notes = readNotes();
     const newNote = {
         id: Date.now(),
-        content: req.body.content,
-        completed: false
+        content: req.body.content
     }
-    notes.push(newNote);
+    let data = notes.users[uuid].notes;
+    data.push(newNote);
     writeNotes(notes);
     res.json(newNote);
 });
